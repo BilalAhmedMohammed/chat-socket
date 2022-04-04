@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+    
+    <div id="chatRoom"></div>
+    <div id="client"></div>
+    <div id="d2"></div>
+    <input type="text" id="chat"><br>
+    <button type="submit" onclick="sendMessage()">send Message</button>
+</body>
+<script>
+    var socket=io.connect('localhost:3000');
+    socket.on('connected',function(data){
+        console.log('successd joined');
+        const nickName=prompt('What is Your Nick Name ??');
+        socket.emit('join',nickName);
+    })
+    socket.on('msg',function(data){
+        document.getElementById('client').innerHTML="Welcome to client <br>";
+        document.getElementById('client').innerHTML+=data;
+    })
+    function sendMessage(){
+        var chat=document.getElementById('chat').value;
+        socket.emit('message',chat);
+    }
+</script>
+</html>
